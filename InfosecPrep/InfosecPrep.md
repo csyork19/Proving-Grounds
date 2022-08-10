@@ -1,6 +1,6 @@
 # InfosecPrep
 
-Machine: [InfosecPrep](https://portal.offensive-security.com/labs/play)\
+Machine: [InfosecPrep](https://portal.offensive-security.com/labs/play)
 
 
 
@@ -8,9 +8,9 @@ Machine: [InfosecPrep](https://portal.offensive-security.com/labs/play)\
 ![Results!](screenshots/1.png)
 
 
-What are the versions of the services?
-22/ssh - OpenSSH 8.2p1 Ubuntu 4ubuntu0.1 (Ubuntu Linux; protocol 2.0)
-80/http - Apache httpd 2.4.41 ((Ubuntu))
+What are the versions of the services?\
+22/ssh - OpenSSH 8.2p1 Ubuntu 4ubuntu0.1 (Ubuntu Linux; protocol 2.0)\
+80/http - Apache httpd 2.4.41 ((Ubuntu))\
 
 
 ### Ssh
