@@ -63,7 +63,7 @@ I ended up following another example online for this exploit because I was unabl
 
 [Exploit tutorial](https://github.com/F-Masood/Booked-Scheduler-2.7.5---RCE-Without-MSF)
 
-![Results!](screenshots/10.png)
+![Results!](screenshots/11.png)
 
 
 ### Flags
@@ -74,10 +74,10 @@ I ended up following another example online for this exploit because I was unabl
 
 #### Root flag
 To escalate my privileges, I found that there is a cron job running on this machine every 3 minutes and I have read,write,execute permissions on the file that is getting run. Based on this, I created a file on my personal machine with the same name and placed python code that will spawn me a shell. Next, I removed the original cron job file that was getting run with the one I created on my machine, then I setup a listener in another terminal to wait for the incoming connection.
-![Results!](screenshots/11.png)
-
-
 ![Results!](screenshots/12.png)
+
+
+![Results!](screenshots/13.png)
 
 
 
