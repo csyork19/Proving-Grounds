@@ -40,7 +40,9 @@ Possible user 'saned' from cat /etc/passwd.
 *** Insert screenshot of local flag ***
 
 ### Root Flag
-
+*** insert screenshot of linpeas output ***
+Used this exploit to priv esc: https://github.com/arthepsy/CVE-2021-4034
+*** INsert screenshot of root flag ***
 
 
 
