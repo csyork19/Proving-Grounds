@@ -82,6 +82,12 @@ Known Usernames .. administrator, guest, krbtgt, domain admins, root, bin, none
 ```
 
 #### MySQL
+This does not appear to be vulnerable and I can't connect.
+```
+$ mysql -h 192.168.99.53 3306
+ERROR 1130 (HY000): Host '192.168.49.99' is not allowed to connect to this MariaDB server
+
+```
 
 #### Panda Pub
 I am not familiar with this but it is a file transfer service of some kind.
@@ -98,18 +104,50 @@ Below are the partial results of the dirbuster scan.  I found a webpage titled '
 
 In the url, I noticed that it is using a parameter called 'page'. This parameter could be levereged for LFI, or LFI to RCE.
 
+I also ran a nikto scan on the Slort webpage I found, and the output of that scan is below. I did not find much information that will help me.
+```
++ Server: Apache/2.4.43 (Win64) OpenSSL/1.1.1g PHP/7.4.6
++ /site/: Retrieved x-powered-by header: PHP/7.4.6.
++ /site/: The anti-clickjacking X-Frame-Options header is not present. See: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
++ /site/: The X-Content-Type-Options header is not set. This could allow the user agent to render the content of the site in a different fashion to the MIME type. See: https://www.netsparker.com/web-vulnerability-scanner/vulnerabilities/missing-content-type-header/
++ Root page /site redirects to: index.php?page=main.php
++ No CGI Directories found (use '-C all' to force check all possible dirs)
++ /index: Apache mod_negotiation is enabled with MultiViews, which allows attackers to easily brute force file names. The following alternatives for 'index' were found: HTTP_NOT_FOUND.html.var, HTTP_NOT_FOUND.html.var, HTTP_NOT_FOUND.html.var, HTTP_NOT_FOUND.html.var, HTTP_NOT_FOUND.html.var, HTTP_NOT_FOUND.html.var, HTTP_NOT_FOUND.html.var, HTTP_NOT_FOUND.html.var, HTTP_NOT_FOUND.html.var, HTTP_NOT_FOUND.html.var, HTTP_NOT_FOUND.html.var, HTTP_NOT_FOUND.html.var, HTTP_NOT_FOUND.html.var, HTTP_NOT_FOUND.html.var, HTTP_NOT_FOUND.html.var, HTTP_NOT_FOUND.html.var, HTTP_NOT_FOUND.html.var, HTTP_NOT_FOUND.html.var, HTTP_NOT_FOUND.html.var, HTTP_NOT_FOUND.html.var, HTTP_NOT_FOUND.html.var. See: http://www.wisec.it/sectou.php?id=4698ebdc59d15,https://exchange.xforce.ibmcloud.com/vulnerabilities/8275
++ OpenSSL/1.1.1g appears to be outdated (current is at least 3.0.7). OpenSSL 1.1.1s is current for the 1.x branch and will be supported until Nov 11 2023.
++ Apache/2.4.43 appears to be outdated (current is at least Apache/2.4.54). Apache 2.2.34 is the EOL for the 2.x branch.
++ PHP/7.4.6 appears to be outdated (current is at least 8.1.5), PHP 7.4.28 for the 7.4 branch.
++ /: HTTP TRACE method is active which suggests the host is vulnerable to XST. See: https://owasp.org/www-community/attacks/Cross_Site_Tracing
++ /site/index.php: PHP include error may indicate local or remote file inclusion is possible.
++ /site/css/: Directory indexing found.
++ /site/css/: This might be interesting.                                                                                                                                                                
++ /site/README.TXT: This might be interesting.                                                                                                                                                          
++ /site/readme.txt: This might be interesting.                                                                                                                                                          
++ /site/images/: Directory indexing found.                                                                                                                                                              
++ /site/LICENSE.txt: License file found may identify site software.                                                                                                                                     
+
+
+```
+
 ### Other Enumeration
 There are a number of unknown open ports on the target, but I will ignore them since I don't know what service, if any, is running on a port.
 
 
 
 ## Exploit
+After my intial enumeration, I still did not have a foothold on the target. I supected the vulnerability is due to the 'page' parameter, but I did not have success when I tested. With Windows, it appears to be different than how one would do in Linux. I saw an example online where someone connected back to their machine to retrieve a file, and then load the file in the browser by updating the parameter in the url. I can do the same thing, but upload a shell and setup a listener to wait for the incoming connection. 
+
+*** Insert screenshot of success test file upload ***
+
+*** Insert screenshot of php webshell ***
+
 
 
 
 ### Local/User flag
 
+*** insert screenshot of user flag ***
 
 ### Root Flag
+*** Insert screenshot of uploading winpeas ***
 
 
