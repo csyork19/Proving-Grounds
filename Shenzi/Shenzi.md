@@ -1,6 +1,6 @@
 # Shenzi
 Machine: [Shenzi](https://portal.offensive-security.com/labs/practice)\
-Difficulty: Intermediate\
+Difficulty: Hard\
 
 
 ## Enumeration
@@ -8,8 +8,6 @@ What ports are open?
 ```
 PORT     STATE SERVICE       VERSION
 21/tcp   open  ftp           FileZilla ftpd 0.9.41 beta
-| ftp-syst: 
-|_  SYST: UNIX emulated by FileZilla
 80/tcp   open  http          Apache httpd 2.4.43 ((Win64) OpenSSL/1.1.1g PHP/7.4.6)
 |_http-server-header: Apache/2.4.43 (Win64) OpenSSL/1.1.1g PHP/7.4.6
 | http-title: Welcome to XAMPP
@@ -18,12 +16,6 @@ PORT     STATE SERVICE       VERSION
 139/tcp  open  netbios-ssn   Microsoft Windows netbios-ssn
 443/tcp  open  ssl/http      Apache httpd 2.4.43 ((Win64) OpenSSL/1.1.1g PHP/7.4.6)
 |_http-server-header: Apache/2.4.43 (Win64) OpenSSL/1.1.1g PHP/7.4.6
-| ssl-cert: Subject: commonName=localhost
-| Not valid before: 2009-11-10T23:48:47
-|_Not valid after:  2019-11-08T23:48:47
-| tls-alpn: 
-|_  http/1.1
-|_ssl-date: TLS randomness does not represent time
 | http-title: Welcome to XAMPP
 |_Requested resource was https://192.168.99.55/dashboard/
 445/tcp  open  microsoft-ds?
@@ -46,14 +38,19 @@ Host script results:
 |_  start_date: N/A
 ```
 
+### Ports Info
+#### FTP 21
+The version of FTP installed on the victim machine, 0.9.41 beta, is vulnerable to a privilege escalation attack based on this [page] (https://github.com/NeoTheCapt/FilezillaExploit). I do not think I can leverge FTP on this machine to help get a reverse shell.
 
-FTP/21 - This appers to be vulnerable but I need to get access to the machine in order to upload the exploit and execute it. https://github.com/NeoTheCapt/FilezillaExploit
+#### HTTP 80
+The webpage is using XAMPP which looks to be some sort of windows server, but I do not see any vulnerabilities for the version on this page. The directory scan results are below.
 
-HTTP/80 - The webpaage is using XAMPP which looks to be some sort of windows server, but I do not see any vulnerabilites for the version on this page. THe directory scan results are below.
+![Results!](screenshots/1.png)
 
 
-139-445/SMB - 
-'''
+#### SMB 139/445 
+I used the smbclient tool since this is a windows machine to enumerate the shares. I found a Shenzi share on the target machine and after connecting, I discovered a file called passwords.txt. I copied this file to my machine to view the file contents.
+```
 smbclient \\\\192.168.99.55\\Shenzi
 Password for [WORKGROUP\kali]:
 Try "help" to get a list of possible commands.
@@ -65,12 +62,9 @@ smb: \> ls
   sess_klk75u2q4rpgfjs3785h6hpipp      A     3879  Thu May 28 11:45:09 2020
   why.tmp                             A      213  Thu May 28 11:45:09 2020
   xampp-control.ini                   A      178  Thu May 28 11:45:09 2020
-'''
-
-
-'''
+```
+```
 cat passwords.txt    
-### XAMPP Default Passwords ###
 
 1) MySQL (phpMyAdmin):
 
@@ -108,36 +102,31 @@ cat passwords.txt
    User: admin
    Password: FeltHeadwallWight357
 
-'''
+```
 
+####  HTTPS 443
 
-
-
-
-## Other Enumeration
-After I was able to connect to the cmb share using smbclient, I found a file that contained the passwords and everything looked normal. However, there is a wordpress pass present in this file, and my directory scan on the webserver did not return anything so I was not sure what to do at this point. Normally I would try to ssh into the machine using each set of credentials, but ssh is not open on this machine.  It turns on the wordpress page is under '/Shenzi' directory on the webserver.
-
-*** Insert screenshot of webserver ***
-
-*** Insert screenshot of wpscan ***
-
-
-
-*** Insert screenshot of the wordpress page ***
-The wordpress version or theme does not appear to be vulnerable. 
-
-
-
-
-Finally, I was able to edit the 404.php page with this webshell, https://github.com/ivan-sincek/php-reverse-shell/blob/master/src/reverse/php_reverse_shell.php. 
-*** insert screenshot of the page with the webshell copied to the edit area ***
-*** Insert the whoami screeshot ***
+#### MySQL 3306
+This might be useful to come back and review later once we can get a shell.  A root password may be stored in the config files for MySQL.
 
 
 ## Exploit
+After I was able to connect to the smb share using smbclient, I found a file that contained the passwords and everything looked normal. However, there is a WordPress password present in this file, and my directory scan on the webserver did not return anything so I was not sure what to do at this point. Normally I would try to ssh into the machine using each set of credentials, but ssh is not open on this machine.  It turns out the WordPress page is under '/Shenzi' directory on the web server.  It makes sense that the scan did not discover this since that word is not present in the word list. 
 
+![Results!](screenshots/2.png)
+
+Using the WordPress credentials found in the smb share, we can log in as Admin.
+![Results!](screenshots/3.png)
+
+From experience, I know we can edit themes php pages in the WordPress site since we are logged in as admin. With the ability to change the php code, I will edit it to leverage a web shell. I did run a wpscan on this page but it did not return anything of use to me.
+
+
+[PHP webshell] (https://github.com/ivan-sincek/php-reverse-shell/blob/master/src/reverse/php_reverse_shell.php). Just update the IP address at the bottom of the file to your IP address. I set up a netcat listener, navigated to the php page that I edited with the webshell, and now I have access.
+![Results!](screenshots/4.png)
+
+![Results!](screenshots/5.png)
 
 ## Local/User Flag
-*** Insert image of local flag ***
+![Results!](screenshots/6.png)
 
 ## Root Flag
