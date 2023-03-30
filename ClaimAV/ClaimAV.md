@@ -80,13 +80,19 @@ PORT   STATE SERVICE
 
 ```
 
+Searchsploit also reveals some information that might be useful.
+![Results!](screenshots/4.png)
+
 #### Http 80
-I did not find any relevant vulerabilities for the version installed on this port. The webpage jsut contain binary numbers, so I will convert that.  Before that, I will run directory scans etc. and see what we find.
-*** Insert screenshot of webpage ***
+I did not find any relevant vulnerabilities for the version installed on this port. The webpage just contain binary numbers, so I will convert that.  Before that, I will run directory scans, etc., and see what we find.
+![Results!](screenshots/1.png)
 
 Translating the binary text, I get this result: ifyoudontpwnmeuran00b.
-*** insert screenshot of binary to text conersion *** 
+![Results!](screenshots/2.png) 
 
+
+I did not find anything in the directory scan that would be of use.
+![Results!](screenshots/3.png)
 #### SMB 139/445
 Just based off the nmap output above, the authentication level is dangerous so this might be useful to us.
 ```
@@ -119,15 +125,24 @@ iso.3.6.1.2.1.1.9.1.2.3 = OID: iso.3.6.1.2.1.49
 
 
 ## Exploit
+Using the perl script that was listed in the searchsploit output, allows us to open a port on the machine and connect to it. [Exploit db](https://www.exploit-db.com/exploits/4761). After running the script, we can see a new port open in the nmap output.
+```
+nmap -p 31337 -sV 192.168.150.42
+Starting Nmap 7.93 ( https://nmap.org ) at 2023-03-30 15:37 EDT
+Nmap scan report for 192.168.150.42
+Host is up (0.21s latency).
 
-Given the first thing I enumerated resulted in me finding information that lead to a shell, I did not bother enumerating the remaining services running on this machine.  With the credentials found for the 'admin' based on the description in the '/api/users' endpoint, I was able to use them to ssh into the machine.
-![Results!](screenshots/4.png)
+PORT      STATE SERVICE VERSION
+31337/tcp open  Elite?
+
+```
+
+To connect back to the victim machine, we can use the netcat tool to connect to the port that was opened after running the script. 
+```
+nc 192.168.150.42 31337 
+```
 ## Local/User Flag
-![Results!](screenshots/5.png)
+N/A for this machine.
 
 ## Root Flag
-I could not move linpeas to the target machine, and I suspect some sort of firewall or proxy is causing this but I am not sure. I turned to manual priv esc techniques. I did run the below command and found an interesting file for a user named 'git'. 
-```
-[dademola@hunit ~]$ find / -name id_rsa 2>/dev/null
-/home/git/.ssh/id_rsa
-```
+![Results!](screenshots/5.png)
