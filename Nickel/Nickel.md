@@ -18,7 +18,7 @@ PORT      STATE SERVICE       VERSION
 ```
 
 ### Credentials discovered (if any)
-Possible creds discoverd from the process output from the curl POST request on port 8089.
+Possible creds were discovered from the process output of the curl POST request on port 8089.
 ariah - Tm93aXNlU2xvb3BUaGVvcnkxMzkK
 
 ### Ports Info
@@ -36,7 +36,7 @@ PORT     STATE SERVICE       REASON
 I am not sure which version of filezilla is installed, it would be useful.
 
 #### SSH/22
-The version running on the target machine, OpenSSH Windows 8.1, might be vulnerable to this [exploit](https://www.exploit-db.com/exploits/21314).  Valid credentials might be needed for this exploit to be sucessful.
+The version running on the target machine, OpenSSH Windows 8.1, might be vulnerable to this [exploit](https://www.exploit-db.com/exploits/21314).  Valid credentials might be needed for this exploit to be successful.
 
 #### MSRPC/135
 
@@ -79,9 +79,9 @@ To enumerate RDP, I ran the below command. The brelow command checks the availab
 
 #### http/8089
 
-
 In the page source, we can see that it tries to make a GET request to a different IP address and port. This is interesting. 
-*** Insert image of the page source
+![Results!](screenshots/1.png)
+![Results!](screenshots/2.png)
 
 I also tried to curl the pages to see what is returned, and I did not get any information. This command was a GET request, but let me try with a POST request.
 ```
@@ -100,7 +100,6 @@ curl: (7) Failed to connect to 169.254.109.39 port 33333 after 3072 ms: Couldn't
 
 I reset the machine and tried again. I got the same result and then I tried with the IP address of the target machine and I got a response from the /list-running-procs endpoint. Since it does not show anything for a "GET" request, I tried with a post request using the curl command line tool. 
 
-*** Insert image of the list running procs "GET" ***
 
 ```
 curl -X POST http://192.168.125.99:33333/list-running-procs
@@ -245,14 +244,22 @@ Maybe do potential directory fuzz since the directory scan did not return anythi
 
 #### http/33333
 There is nothing returned from the directory scan, but the page says 'invalid token'.
-*** insert screenshot of the page ***
+![Results!](screenshots/3.png)
 
 
 
 ## Exploit
 
-```
-## Local/User Flag
+After my enumeration, I thought I had a clear path to get into the machine. I found a set of credentials from the list of running processes on the target machine. The credentials were passed in the command line, but I am not able to use them to ssh or rdp into the target. Turns out I needed to decode the password I discovered and then use that to log in.
 
+```
+└─$ echo "Tm93aXNlU2xvb3BUaGVvcnkxMzkK" | base64 -d
+```
+
+![Results!](screenshots/4.png)
+
+## Local/User Flag
+I apologize for being a windows noob :)
+![Results!](screenshots/5.png)
 
 ## Root Flag
