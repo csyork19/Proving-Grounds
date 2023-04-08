@@ -22,6 +22,35 @@ Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 
 
 ### Credentials discovered (if any)
+Found the thre users on the wordpress site: admin, jerry, tom.
+
+tom/parturient
+jerry/adipiscing
+
+
+```
+[i] User(s) Identified:
+
+[+] admin
+ | Found By: Rss Generator (Passive Detection)
+ | Confirmed By:
+ |  Wp Json Api (Aggressive Detection)
+ |   - http://dc-2/index.php/wp-json/wp/v2/users/?per_page=100&page=1
+ |  Author Id Brute Forcing - Author Pattern (Aggressive Detection)
+ |  Login Error Messages (Aggressive Detection)
+
+[+] jerry
+ | Found By: Wp Json Api (Aggressive Detection)
+ |  - http://dc-2/index.php/wp-json/wp/v2/users/?per_page=100&page=1
+ | Confirmed By:
+ |  Author Id Brute Forcing - Author Pattern (Aggressive Detection)
+ |  Login Error Messages (Aggressive Detection)
+
+[+] tom
+ | Found By: Author Id Brute Forcing - Author Pattern (Aggressive Detection)
+ | Confirmed By: Login Error Messages (Aggressive Detection)
+
+```
 
 ### Ports Info
 #### Http 80
@@ -98,15 +127,35 @@ Interesting Finding(s):
                                          
 ```
 
+
+I tried to brute for the passwords using wpscan, but after 30+ minutes, I did not have a single hit. Next I tried to use hydra to try and use the names found to login via ssh but I did not have any success.  Going back to the webpage, I noticed there is a messaged under the Flag page that leaves an interesting note. From there, I was able to use a different wordlist and rerun by wpscan which resulted in finding credentials. 
+*** Insert screenshto of the wpscan passwords ***
+
+*** Insert screenshot of tom's password *** 
+
 #### SSH 7744
 This version is not vulnerable. However, this might be leveraged if we find user credentials via other means of enumeration. 
 
 https://www.exploit-db.com/exploits/17465
 
+Was able to login with creds found from wpscan. Could run many commands when logged in as tom. I tried to change from rbash to a normal shell but that did not work.
+```
+ssh tom@192.168.125.194 -p 7744 -t "/bin/sh"
+
+```
+
+
+
 
 ## Exploit
 
 ## Local/User Flag
+I could not run any commands due to rbash, but I did discover that <pre>vi</pre> can be run. We can leverge the vi tool to create a new shell. This is will get rid of the rbash.
+After trial and error and some research, I found out I was doing it incorrectly. 
+
+Using ``vi`` I was able to view the local.txt in /home/tom. 
+
+
 
 
 ## Root Flag
