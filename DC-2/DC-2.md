@@ -54,7 +54,7 @@ jerry/adipiscing
 
 ### Ports Info
 #### Http 80
-*** Insert screenshot of home page *** 
+![Results!](screenshots/1.png)
 
 
 Output from wpscan :
@@ -128,10 +128,12 @@ Interesting Finding(s):
 ```
 
 
-I tried to brute for the passwords using wpscan, but after 30+ minutes, I did not have a single hit. Next I tried to use hydra to try and use the names found to login via ssh but I did not have any success.  Going back to the webpage, I noticed there is a messaged under the Flag page that leaves an interesting note. From there, I was able to use a different wordlist and rerun by wpscan which resulted in finding credentials. 
-*** Insert screenshto of the wpscan passwords ***
+I tried to brute for the passwords using wpscan, but after 30+ minutes, I did not have a single hit. Next, I tried to use hydra to try and use the names found to log in via ssh but I did not have any success.  Going back to the webpage, I noticed there is a message under the Flag page that leaves an interesting note. From there, I was able to use a different wordlist and rerun by wpscan which resulted in finding credentials. 
+![Results!](screenshots/2.png)
 
-*** Insert screenshot of tom's password *** 
+![Results!](screenshots/3.png)
+
+![Results!](screenshots/4.png)
 
 #### SSH 7744
 This version is not vulnerable. However, this might be leveraged if we find user credentials via other means of enumeration. 
@@ -150,12 +152,18 @@ ssh tom@192.168.125.194 -p 7744 -t "/bin/sh"
 ## Exploit
 
 ## Local/User Flag
-I could not run any commands due to rbash, but I did discover that <pre>vi</pre> can be run. We can leverge the vi tool to create a new shell. This is will get rid of the rbash.
+I could not run any commands due to rbash, but I did discover that <pre>vi</pre> can be run. We can leverage the vi tool to create a new shell. This is will get rid of the rbash.
 After trial and error and some research, I found out I was doing it incorrectly. 
 
-Using ``vi`` I was able to view the local.txt in /home/tom. 
+1. ```vi```
+2. :set shell=/bin/bash
+3. :shell
 
+
+Using the ``vi``command line tool I was able to view the local.txt in /home/tom. 
+![Results!](screenshots/5.png)
 
 
 
 ## Root Flag
+I tried my normal manual privilege escalation techniques, but I did not have success. Then I revisited the flag file for tom to get a hint, and then I tried to ```su``` to jerry based on what I found.  I believe the machine is messed up because I could not run any normal commands after changing the rbash shell. I could use the ```cd``` command, but the other commands like ```cat``` or ```su``` still did not work.  
