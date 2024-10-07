@@ -96,9 +96,7 @@ OpenSSH 8.9p1 Ubuntu 3 (Ubuntu Linux; protocol 2.0)
 
 
 ### Http-alt Port 8000
-*** enter screenshot of the login page ***
 Gereapy Version - Gerapy v0.9.7 
-
 I was able to login with default credentials - admin/admin as the username/password respectively. 
 
 
@@ -112,6 +110,6 @@ For privilege escalation, pay attention to the output of tools such as linpeas.
 
 
 ### Proof 
-![Results!](screenshots/1.png)
+![Results!](screenshots/proof.png)
 
 
